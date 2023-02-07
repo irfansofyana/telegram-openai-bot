@@ -27,7 +27,7 @@ Before starting this project, make sure you have the following ready:
 2. Save the access token as a `secret` in the Replit project.
 3. Setting up the bot commands by chatting `/setcommands` to @BotFather and set following command `whoami`, `tldr`, `ama`, `code`, `explaincode`, `brainstorm`.
 
-### Run the Bot
+## Run the Bot
 
 Just click `Run` on Replit the project and the bot ready to help you answering your questions!
 

@@ -3,8 +3,7 @@
 This README provides setup instructions for creating a Telegram Bot using Typescript, OpenAI API and Replit. Using these technologies, you can create a bot that can respond to user commands and execute functions programmed into the code. 
 
 ## Prerequisites 
-Before starting this project, make sure you have the following installed: 
-* Node.js and npm (https://nodejs.org/en/) 
+Before starting this project, make sure you have the following ready:
 * Telegram Desktop (https://desktop.telegram.org/) 
 * OpenAI API account (https://openai.com/) 
 * Replit account (https://repl.it/) 

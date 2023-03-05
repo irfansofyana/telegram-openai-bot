@@ -118,6 +118,14 @@ class MyOpenAI {
     });
     return (_a = response.data.choices[0].message) == null ? void 0 : _a.content;
   }
+  async createImage(text) {
+    const response = await this.client.createImage({
+      prompt: text,
+      size: "256x256",
+      response_format: "url"
+    });
+    return response.data.data[0].url;
+  }
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

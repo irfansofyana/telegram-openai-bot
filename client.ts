@@ -108,4 +108,14 @@ export class MyOpenAI {
 
     return response.data.choices[0].message?.content as string;
   }
+
+  public async createImage(text: string): Promise<string> {
+    const response = await this.client.createImage({
+      prompt: text,
+      size: '256x256',
+      response_format: 'url'
+    })
+
+    return response.data.data[0].url as string;
+  }
 }

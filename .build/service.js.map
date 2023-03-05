@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../service.ts"],
-  "sourcesContent": ["import { MyOpenAI } from \"./client\"\n\nexport class AIService {\n  client: MyOpenAI\n\n  constructor() {\n    this.client = new MyOpenAI();\n  }\n\n  public async tldr(text: string): Promise<string> {\n    return this.client.tldr(text);\n  }\n\n  public async ama(text: string): Promise<string> {\n    return this.client.ama(text);\n  }\n\n  public async writeCode(text: string): Promise<string> {\n    return this.client.writeCode(text);\n  }\n\n  public async explainCode(text: string): Promise<string> {\n    return this.client.explainCode(text);\n  }\n\n  public async brainstorm(text: string): Promise<string> {\n    return this.client.brainstorm(text);\n  }\n\n  public async chat(text: string): Promise<string> {\n    return this.client.chat(text);\n  }\n}"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAyB;AAElB,MAAM,UAAU;AAAA,EACrB;AAAA,EAEA,cAAc;AACZ,SAAK,SAAS,IAAI,uBAAS;AAAA,EAC7B;AAAA,EAEA,MAAa,KAAK,MAA+B;AAC/C,WAAO,KAAK,OAAO,KAAK,IAAI;AAAA,EAC9B;AAAA,EAEA,MAAa,IAAI,MAA+B;AAC9C,WAAO,KAAK,OAAO,IAAI,IAAI;AAAA,EAC7B;AAAA,EAEA,MAAa,UAAU,MAA+B;AACpD,WAAO,KAAK,OAAO,UAAU,IAAI;AAAA,EACnC;AAAA,EAEA,MAAa,YAAY,MAA+B;AACtD,WAAO,KAAK,OAAO,YAAY,IAAI;AAAA,EACrC;AAAA,EAEA,MAAa,WAAW,MAA+B;AACrD,WAAO,KAAK,OAAO,WAAW,IAAI;AAAA,EACpC;AAAA,EAEA,MAAa,KAAK,MAA+B;AAC/C,WAAO,KAAK,OAAO,KAAK,IAAI;AAAA,EAC9B;AACF;",
-  "names": []
-}

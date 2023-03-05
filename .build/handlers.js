@@ -22,21 +22,22 @@ __export(handlers_exports, {
   brainstorm: () => brainstorm,
   chat: () => chat,
   explainCode: () => explainCode,
+  image: () => image,
   tldr: () => tldr,
   writeCode: () => writeCode
 });
 module.exports = __toCommonJS(handlers_exports);
 var import_telegraf = require("telegraf");
 var import_filters = require("telegraf/filters");
-var import_service = require("./service");
-const service = new import_service.AIService();
+var import_client = require("./client");
+const myAI = new import_client.MyOpenAI();
 const tldr = new import_telegraf.Scenes.BaseScene("tldr");
 tldr.enter((ctx) => ctx.reply("Please give me the text boss"));
 tldr.on((0, import_filters.message)("text"), async (ctx) => {
   const textInput = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await service.tldr(textInput);
+    const response = await myAI.tldr(textInput);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -50,7 +51,7 @@ ama.on((0, import_filters.message)("text"), async (ctx) => {
   const question = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await service.ama(question);
+    const response = await myAI.ama(question);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -65,7 +66,7 @@ writeCode.on((0, import_filters.message)("text"), async (ctx) => {
   const instruction = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await service.writeCode(instruction);
+    const response = await myAI.writeCode(instruction);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -80,7 +81,7 @@ explainCode.on((0, import_filters.message)("text"), async (ctx) => {
   const codes = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await service.explainCode(codes);
+    const response = await myAI.explainCode(codes);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -89,14 +90,26 @@ explainCode.on((0, import_filters.message)("text"), async (ctx) => {
   }
 });
 const brainstorm = new import_telegraf.Scenes.BaseScene("brainstorm");
-brainstorm.enter((ctx) => ctx.reply(`what is it that you want me to brainstorm?`));
+brainstorm.enter((ctx) => ctx.reply("what do we want to brainstorm?boss?"));
 brainstorm.on((0, import_filters.message)("text"), async (ctx) => {
   const topic = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await service.brainstorm(topic);
+    const response = await myAI.brainstorm(topic);
     ctx.reply(response);
     return ctx.scene.leave();
+  } catch (err) {
+    console.error(err);
+    ctx.reply("Oopss.. there something wrong boss, please try again later!");
+  }
+});
+const image = new import_telegraf.Scenes.BaseScene("image");
+image.enter((ctx) => ctx.reply("what kind of image that you want to create, boss?"));
+image.on((0, import_filters.message)("text"), async (ctx) => {
+  const text = ctx.message.text;
+  try {
+    const response = await myAI.createImage(text);
+    ctx.replyWithPhoto({ url: response });
   } catch (err) {
     console.error(err);
     ctx.reply("Oopss.. there something wrong boss, please try again later!");
@@ -105,7 +118,7 @@ brainstorm.on((0, import_filters.message)("text"), async (ctx) => {
 const chat = async (ctx) => {
   const text = ctx.message.text;
   try {
-    const response = await service.chat(text);
+    const response = await myAI.chat(text);
     ctx.reply(response);
   } catch (err) {
     console.error(err);
@@ -118,6 +131,7 @@ const chat = async (ctx) => {
   brainstorm,
   chat,
   explainCode,
+  image,
   tldr,
   writeCode
 });

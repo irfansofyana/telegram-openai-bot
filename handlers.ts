@@ -1,8 +1,8 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
-import { AIService } from './service';
+import { MyOpenAI } from './client';
 
-const service = new AIService();
+const myAI = new MyOpenAI();
 
 export const tldr = new Scenes.BaseScene('tldr');
 tldr.enter(ctx => ctx.reply('Please give me the text boss'));
@@ -10,7 +10,7 @@ tldr.on(message('text'), async ctx => {
   const textInput = ctx.message.text;
   try {
     ctx.reply('Hang on boss.. this might take a while.');
-    const response = await service.tldr(textInput);
+    const response = await myAI.tldr(textInput);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -25,7 +25,7 @@ ama.on(message('text'), async ctx => {
   const question = ctx.message.text;
   try {
     ctx.reply('Hang on boss.. this might take a while.');
-    const response = await service.ama(question);
+    const response = await myAI.ama(question);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -40,7 +40,7 @@ writeCode.on(message('text'), async ctx => {
   const instruction = ctx.message.text;
   try {
     ctx.reply('Hang on boss.. this might take a while.');
-    const response = await service.writeCode(instruction);
+    const response = await myAI.writeCode(instruction);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -55,7 +55,7 @@ explainCode.on(message('text'), async ctx => {
   const codes = ctx.message.text;
   try {
     ctx.reply('Hang on boss.. this might take a while.');
-    const response = await service.explainCode(codes);
+    const response = await myAI.explainCode(codes);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -65,14 +65,27 @@ explainCode.on(message('text'), async ctx => {
 });
 
 export const brainstorm = new Scenes.BaseScene('brainstorm');
-brainstorm.enter(ctx => ctx.reply(`what is it that you want me to brainstorm?`));
+brainstorm.enter(ctx => ctx.reply('what do we want to brainstorm?boss?'));
 brainstorm.on(message('text'), async ctx => {
   const topic = ctx.message.text;
   try {
     ctx.reply('Hang on boss.. this might take a while.');
-    const response = await service.brainstorm(topic);
+    const response = await myAI.brainstorm(topic);
     ctx.reply(response);
     return ctx.scene.leave();
+  } catch (err) {
+    console.error(err);
+    ctx.reply('Oopss.. there something wrong boss, please try again later!');
+  }
+});
+
+export const image = new Scenes.BaseScene('image');
+image.enter(ctx => ctx.reply('what kind of image that you want to create, boss?'));
+image.on(message('text'), async ctx => {
+  const text = ctx.message.text;
+  try {
+    const response = await myAI.createImage(text);
+    ctx.replyWithPhoto({ url: response });
   } catch (err) {
     console.error(err);
     ctx.reply('Oopss.. there something wrong boss, please try again later!');
@@ -82,7 +95,7 @@ brainstorm.on(message('text'), async ctx => {
 export const chat = async (ctx: any) => {
   const text = ctx.message.text;
   try {
-    const response = await service.chat(text);
+    const response = await myAI.chat(text);
     ctx.reply(response);
   } catch (err) {
     console.error(err);

@@ -6,7 +6,8 @@ import {
   writeCode,
   explainCode,
   brainstorm,
-  chat
+  chat,
+  image
 } from './handlers';
 
 const botToken: string | undefined = process.env.TELEGRAM_BOT_TOKEN;
@@ -19,7 +20,9 @@ const bot = new Telegraf(botToken);
 
 const ownerTelegramID: number = Number(process.env.OWNER_TELEGRAM_ID);
 
-const stage = new Scenes.Stage([tldr, ama, writeCode, explainCode, brainstorm]);
+const stage = new Scenes.Stage([
+  tldr, ama, writeCode, explainCode, brainstorm, image
+]);
 
 bot.use(async (ctx, next) => {
   if (ctx.from?.id != ownerTelegramID) {
@@ -43,6 +46,8 @@ bot.command('code', ctx => ctx.scene.enter('writecode'));
 bot.command('explaincode', ctx => ctx.scene.enter('explaincode'));
 
 bot.command('brainstorm', ctx => ctx.scene.enter('brainstorm'));
+
+bot.command('image', ctx => ctx.scene.enter('image'));
 
 bot.command('whoami', ctx => {
   ctx.reply(`I am a telegram bot that is used by @irfansppp to become his personal assistant. I'm powered by OpenAI.`);

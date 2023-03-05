@@ -9,7 +9,14 @@ if (botToken === void 0) {
 }
 const bot = new import_telegraf.Telegraf(botToken);
 const ownerTelegramID = Number(process.env.OWNER_TELEGRAM_ID);
-const stage = new import_telegraf.Scenes.Stage([import_handlers.tldr, import_handlers.ama, import_handlers.writeCode, import_handlers.explainCode, import_handlers.brainstorm]);
+const stage = new import_telegraf.Scenes.Stage([
+  import_handlers.tldr,
+  import_handlers.ama,
+  import_handlers.writeCode,
+  import_handlers.explainCode,
+  import_handlers.brainstorm,
+  import_handlers.image
+]);
 bot.use(async (ctx, next) => {
   var _a;
   if (((_a = ctx.from) == null ? void 0 : _a.id) != ownerTelegramID) {
@@ -25,6 +32,7 @@ bot.command("ama", (ctx) => ctx.scene.enter("ama"));
 bot.command("code", (ctx) => ctx.scene.enter("writecode"));
 bot.command("explaincode", (ctx) => ctx.scene.enter("explaincode"));
 bot.command("brainstorm", (ctx) => ctx.scene.enter("brainstorm"));
+bot.command("image", (ctx) => ctx.scene.enter("image"));
 bot.command("whoami", (ctx) => {
   ctx.reply(`I am a telegram bot that is used by @irfansppp to become his personal assistant. I'm powered by OpenAI.`);
 });

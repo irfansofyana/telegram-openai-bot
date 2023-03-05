@@ -86,6 +86,7 @@ image.on(message('text'), async ctx => {
   try {
     const response = await myAI.createImage(text);
     ctx.replyWithPhoto({ url: response });
+    return ctx.scene.leave();
   } catch (err) {
     console.error(err);
     ctx.reply('Oopss.. there something wrong boss, please try again later!');

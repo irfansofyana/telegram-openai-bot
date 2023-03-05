@@ -1,11 +1,13 @@
 import { Telegraf, Scenes, session } from 'telegraf';
+import { message } from 'telegraf/filters';
 import {
-  tldrWizard,
-  amaWizard,
-  writeCodeWizard,
-  explainCodeWizard,
-  brainstormWizard
-} from './wizard';
+  tldr,
+  ama,
+  writeCode,
+  explainCode,
+  brainstorm,
+  chat
+} from './handlers';
 
 const botToken: string | undefined = process.env.TELEGRAM_BOT_TOKEN;
 if (botToken === undefined) {
@@ -17,9 +19,7 @@ const bot = new Telegraf(botToken);
 
 const ownerTelegramID: number = Number(process.env.OWNER_TELEGRAM_ID);
 
-const stage = new Scenes.Stage([
-  tldrWizard, amaWizard, writeCodeWizard, explainCodeWizard, brainstormWizard
-]);
+const stage = new Scenes.Stage([tldr, ama, writeCode, explainCode, brainstorm]);
 
 bot.use(async (ctx, next) => {
   if (ctx.from?.id != ownerTelegramID) {
@@ -48,9 +48,11 @@ bot.command('whoami', ctx => {
   ctx.reply(`I am a telegram bot that is used by @irfansppp to become his personal assistant. I'm powered by OpenAI.`);
 });
 
-bot.on('message', ctx => {
-  ctx.reply(`Please use commands available in order to ask me, boss.`)
+bot.on(message('text'), ctx => {
+  chat(ctx)
 });
+
+bot.on('sticker', (ctx) => ctx.reply('👍'))
 
 bot.launch();
 

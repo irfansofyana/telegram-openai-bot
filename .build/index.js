@@ -1,6 +1,7 @@
 "use strict";
 var import_telegraf = require("telegraf");
-var import_wizard = require("./wizard");
+var import_filters = require("telegraf/filters");
+var import_handlers = require("./handlers");
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 if (botToken === void 0) {
   console.error("missing telegram bot token");
@@ -8,13 +9,7 @@ if (botToken === void 0) {
 }
 const bot = new import_telegraf.Telegraf(botToken);
 const ownerTelegramID = Number(process.env.OWNER_TELEGRAM_ID);
-const stage = new import_telegraf.Scenes.Stage([
-  import_wizard.tldrWizard,
-  import_wizard.amaWizard,
-  import_wizard.writeCodeWizard,
-  import_wizard.explainCodeWizard,
-  import_wizard.brainstormWizard
-]);
+const stage = new import_telegraf.Scenes.Stage([import_handlers.tldr, import_handlers.ama, import_handlers.writeCode, import_handlers.explainCode, import_handlers.brainstorm]);
 bot.use(async (ctx, next) => {
   var _a;
   if (((_a = ctx.from) == null ? void 0 : _a.id) != ownerTelegramID) {
@@ -33,9 +28,10 @@ bot.command("brainstorm", (ctx) => ctx.scene.enter("brainstorm"));
 bot.command("whoami", (ctx) => {
   ctx.reply(`I am a telegram bot that is used by @irfansppp to become his personal assistant. I'm powered by OpenAI.`);
 });
-bot.on("message", (ctx) => {
-  ctx.reply(`Please use commands available in order to ask me, boss.`);
+bot.on((0, import_filters.message)("text"), (ctx) => {
+  (0, import_handlers.chat)(ctx);
 });
+bot.on("sticker", (ctx) => ctx.reply("\u{1F44D}"));
 bot.launch();
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));

@@ -16,26 +16,27 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var wizard_exports = {};
-__export(wizard_exports, {
-  amaWizard: () => amaWizard,
-  brainstormWizard: () => brainstormWizard,
-  explainCodeWizard: () => explainCodeWizard,
-  tldrWizard: () => tldrWizard,
-  writeCodeWizard: () => writeCodeWizard
+var handlers_exports = {};
+__export(handlers_exports, {
+  ama: () => ama,
+  brainstorm: () => brainstorm,
+  chat: () => chat,
+  explainCode: () => explainCode,
+  tldr: () => tldr,
+  writeCode: () => writeCode
 });
-module.exports = __toCommonJS(wizard_exports);
-var import_openai = require("./openai");
+module.exports = __toCommonJS(handlers_exports);
 var import_telegraf = require("telegraf");
 var import_filters = require("telegraf/filters");
-const myAI = new import_openai.MyOpenAI();
-const tldrWizard = new import_telegraf.Scenes.BaseScene("tldr");
-tldrWizard.enter((ctx) => ctx.reply("Please give me the text boss"));
-tldrWizard.on((0, import_filters.message)("text"), async (ctx) => {
+var import_service = require("./service");
+const service = new import_service.AIService();
+const tldr = new import_telegraf.Scenes.BaseScene("tldr");
+tldr.enter((ctx) => ctx.reply("Please give me the text boss"));
+tldr.on((0, import_filters.message)("text"), async (ctx) => {
   const textInput = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await myAI.tldr(textInput);
+    const response = await service.tldr(textInput);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -43,13 +44,13 @@ tldrWizard.on((0, import_filters.message)("text"), async (ctx) => {
     ctx.reply("Oopss.. there something wrong boss, please try again later!");
   }
 });
-const amaWizard = new import_telegraf.Scenes.BaseScene("ama");
-amaWizard.enter((ctx) => ctx.reply("Give me your question boss, I would like to help!"));
-amaWizard.on((0, import_filters.message)("text"), async (ctx) => {
+const ama = new import_telegraf.Scenes.BaseScene("ama");
+ama.enter((ctx) => ctx.reply("Give me your question boss, I would like to help!"));
+ama.on((0, import_filters.message)("text"), async (ctx) => {
   const question = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await myAI.askRandom(question);
+    const response = await service.ama(question);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -57,14 +58,14 @@ amaWizard.on((0, import_filters.message)("text"), async (ctx) => {
     ctx.reply("Oopss.. there something wrong boss, please try again later!");
   }
 });
-const writeCodeWizard = new import_telegraf.Scenes.BaseScene("writecode");
-writeCodeWizard.enter((ctx) => ctx.reply(`Give me your question boss!
+const writeCode = new import_telegraf.Scenes.BaseScene("writecode");
+writeCode.enter((ctx) => ctx.reply(`Give me your question boss!
 Note: Check https://platform.openai.com/docs/guides/code to maximize the use of me on this.`));
-writeCodeWizard.on((0, import_filters.message)("text"), async (ctx) => {
+writeCode.on((0, import_filters.message)("text"), async (ctx) => {
   const instruction = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await myAI.writeCode(instruction);
+    const response = await service.writeCode(instruction);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -72,14 +73,14 @@ writeCodeWizard.on((0, import_filters.message)("text"), async (ctx) => {
     ctx.reply("Oopss.. there something wrong boss, please try again later!");
   }
 });
-const explainCodeWizard = new import_telegraf.Scenes.BaseScene("explaincode");
-explainCodeWizard.enter((ctx) => ctx.reply(`Give me that hard code boss, I would like to help explain it!
+const explainCode = new import_telegraf.Scenes.BaseScene("explaincode");
+explainCode.enter((ctx) => ctx.reply(`Give me that hard code boss, I would like to help explain it!
 Note: Check https://platform.openai.com/docs/guides/code to maximize the use of me on this.`));
-explainCodeWizard.on((0, import_filters.message)("text"), async (ctx) => {
+explainCode.on((0, import_filters.message)("text"), async (ctx) => {
   const codes = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await myAI.explainCode(codes);
+    const response = await service.explainCode(codes);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -87,13 +88,13 @@ explainCodeWizard.on((0, import_filters.message)("text"), async (ctx) => {
     ctx.reply("Oopss.. there something wrong boss, please try again later!");
   }
 });
-const brainstormWizard = new import_telegraf.Scenes.BaseScene("brainstorm");
-brainstormWizard.enter((ctx) => ctx.reply(`what is it that you want me to brainstorm?`));
-brainstormWizard.on((0, import_filters.message)("text"), async (ctx) => {
+const brainstorm = new import_telegraf.Scenes.BaseScene("brainstorm");
+brainstorm.enter((ctx) => ctx.reply(`what is it that you want me to brainstorm?`));
+brainstorm.on((0, import_filters.message)("text"), async (ctx) => {
   const topic = ctx.message.text;
   try {
     ctx.reply("Hang on boss.. this might take a while.");
-    const response = await myAI.brainstorm(topic);
+    const response = await service.brainstorm(topic);
     ctx.reply(response);
     return ctx.scene.leave();
   } catch (err) {
@@ -101,12 +102,23 @@ brainstormWizard.on((0, import_filters.message)("text"), async (ctx) => {
     ctx.reply("Oopss.. there something wrong boss, please try again later!");
   }
 });
+const chat = async (ctx) => {
+  const text = ctx.message.text;
+  try {
+    const response = await service.chat(text);
+    ctx.reply(response);
+  } catch (err) {
+    console.error(err);
+    ctx.reply("Oopss.. there something wrong boss, please try again later!");
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  amaWizard,
-  brainstormWizard,
-  explainCodeWizard,
-  tldrWizard,
-  writeCodeWizard
+  ama,
+  brainstorm,
+  chat,
+  explainCode,
+  tldr,
+  writeCode
 });
-//# sourceMappingURL=wizard.js.map
+//# sourceMappingURL=handlers.js.map

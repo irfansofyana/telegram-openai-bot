@@ -16,11 +16,11 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var openai_exports = {};
-__export(openai_exports, {
+var client_exports = {};
+__export(client_exports, {
   MyOpenAI: () => MyOpenAI
 });
-module.exports = __toCommonJS(openai_exports);
+module.exports = __toCommonJS(client_exports);
 var import_openai = require("openai");
 class MyOpenAI {
   client;
@@ -87,7 +87,7 @@ class MyOpenAI {
     });
     return response.data.choices[0].text;
   }
-  async askRandom(text) {
+  async ama(text) {
     const response = await this.client.createCompletion({
       model: "text-davinci-003",
       prompt: text,
@@ -97,11 +97,30 @@ class MyOpenAI {
       frequency_penalty: 0.5,
       presence_penalty: 0.5
     });
-    return response.data.choices[0].text || `I don't know the answer`;
+    return response.data.choices[0].text || `Sorry boss, I don't know the answer`;
+  }
+  async chat(text) {
+    var _a;
+    const response = await this.client.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You're a helpful assistant who can answer the general question from users very clearly and concisely. But in case you are unsure or you don't know about the answer, please respond with an apology"
+        },
+        {
+          role: "user",
+          content: text
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 300
+    });
+    return (_a = response.data.choices[0].message) == null ? void 0 : _a.content;
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   MyOpenAI
 });
-//# sourceMappingURL=openai.js.map
+//# sourceMappingURL=client.js.map

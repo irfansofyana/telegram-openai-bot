@@ -75,7 +75,7 @@ export class MyOpenAI {
     return response.data.choices[0].text as string;
   }
 
-  public async askRandom(text: string): Promise<string> {
+  public async ama(text: string): Promise<string> {
     const response = await this.client.createCompletion({
       model: 'text-davinci-003',
       prompt: text,
@@ -86,6 +86,26 @@ export class MyOpenAI {
       presence_penalty: 0.5
     });
 
-    return response.data.choices[0].text as string || `I don't know the answer`;
+    return response.data.choices[0].text as string || `Sorry boss, I don't know the answer`;
+  }
+
+  public async chat(text: string): Promise<string> {
+    const response = await this.client.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'system',
+          content: "You're a helpful assistant who can answer the general question from users very clearly and concisely. But in case you are unsure or you don't know about the answer, please respond with an apology"
+        },
+        {
+          role: 'user',
+          content: text
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 300,
+    });
+
+    return response.data.choices[0].message?.content as string;
   }
 }

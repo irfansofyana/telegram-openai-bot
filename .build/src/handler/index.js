@@ -20,8 +20,8 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) =>
   __copyProps(__defProp({}, '__esModule', { value: true }), mod);
-var handlers_exports = {};
-__export(handlers_exports, {
+var handler_exports = {};
+__export(handler_exports, {
   ama: () => ama,
   brainstorm: () => brainstorm,
   chat: () => chat,
@@ -30,10 +30,10 @@ __export(handlers_exports, {
   tldr: () => tldr,
   writeCode: () => writeCode
 });
-module.exports = __toCommonJS(handlers_exports);
+module.exports = __toCommonJS(handler_exports);
 var import_telegraf = require('telegraf');
 var import_filters = require('telegraf/filters');
-var import_client = require('./client');
+var import_client = require('../client');
 const myAI = new import_client.MyOpenAI();
 const tldr = new import_telegraf.Scenes.BaseScene('tldr');
 tldr.enter(async (ctx) => await ctx.reply('Please give me the text boss'));
@@ -171,4 +171,4 @@ const chat = async (ctx) => {
     tldr,
     writeCode
   });
-//# sourceMappingURL=handlers.js.map
+//# sourceMappingURL=index.js.map

@@ -139,4 +139,4 @@ class MyOpenAI {
   (module.exports = {
     MyOpenAI
   });
-//# sourceMappingURL=client.js.map
+//# sourceMappingURL=index.js.map

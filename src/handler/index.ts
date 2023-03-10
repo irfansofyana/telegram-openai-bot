@@ -1,6 +1,6 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
-import { MyOpenAI } from './client';
+import { MyOpenAI } from '../client';
 
 const myAI = new MyOpenAI();
 
@@ -123,6 +123,7 @@ image.on(message('text'), async (ctx) => {
   }
 });
 
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export const chat = async (ctx: any): Promise<void> => {
   const text = ctx.message.text;
   try {

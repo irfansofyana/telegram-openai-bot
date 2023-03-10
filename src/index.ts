@@ -8,19 +8,21 @@ import {
   brainstorm,
   chat,
   image
-} from './handlers';
+} from './handler';
+import { telegramToken, ownerTelegramId } from './config';
 
-const botToken: string | undefined = process.env.TELEGRAM_BOT_TOKEN;
-if (botToken === undefined) {
-  console.error('missing telegram bot token');
-  process.exit();
-}
+const createBot = (telegramToken: string | undefined): Telegraf => {
+  if (telegramToken === undefined) {
+    console.error('missing telegram bot token');
+    process.exit();
+  }
 
-const bot = new Telegraf(botToken);
+  return new Telegraf(telegramToken);
+};
+
+const bot = createBot(telegramToken);
 
 const main = async (): Promise<void> => {
-  const ownerTelegramID = Number(process.env.OWNER_TELEGRAM_ID);
-
   const stage = new Scenes.Stage([
     tldr,
     ama,
@@ -31,7 +33,7 @@ const main = async (): Promise<void> => {
   ]);
 
   bot.use(async (ctx, next) => {
-    if (ctx.from?.id !== ownerTelegramID) {
+    if (ctx.from?.id !== ownerTelegramId) {
       await ctx.reply("You're not my boss, I can't answer your question!");
       return;
     }

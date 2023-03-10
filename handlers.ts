@@ -12,7 +12,7 @@ tldr.on(message('text'), async (ctx) => {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.tldr(textInput);
     await ctx.reply(response);
-    return ctx.scene.leave();
+    await ctx.scene.leave();
   } catch (err) {
     console.error(err);
     await ctx.reply(
@@ -32,7 +32,7 @@ ama.on(message('text'), async (ctx) => {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.ama(question);
     await ctx.reply(response);
-    return ctx.scene.leave();
+    await ctx.scene.leave();
   } catch (err) {
     console.error(err);
     await ctx.reply(
@@ -54,7 +54,7 @@ writeCode.on(message('text'), async (ctx) => {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.writeCode(instruction);
     await ctx.reply(response);
-    return ctx.scene.leave();
+    await ctx.scene.leave();
   } catch (err) {
     console.error(err);
     await ctx.reply(
@@ -76,7 +76,7 @@ explainCode.on(message('text'), async (ctx) => {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.explainCode(codes);
     await ctx.reply(response);
-    return ctx.scene.leave();
+    await ctx.scene.leave();
   } catch (err) {
     console.error(err);
     await ctx.reply(
@@ -95,7 +95,7 @@ brainstorm.on(message('text'), async (ctx) => {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.brainstorm(topic);
     await ctx.reply(response);
-    return ctx.scene.leave();
+    await ctx.scene.leave();
   } catch (err) {
     console.error(err);
     await ctx.reply(
@@ -114,7 +114,7 @@ image.on(message('text'), async (ctx) => {
   try {
     const response = await myAI.createImage(text);
     await ctx.replyWithPhoto({ url: response });
-    return ctx.scene.leave();
+    await ctx.scene.leave();
   } catch (err) {
     console.error(err);
     await ctx.reply(
@@ -123,11 +123,11 @@ image.on(message('text'), async (ctx) => {
   }
 });
 
-export const chat = async (ctx: any): Promise<unknown> => {
+export const chat = async (ctx: any): Promise<void> => {
   const text = ctx.message.text;
   try {
     const response = await myAI.chat(text);
-    return ctx.replyWithMarkdown(response);
+    await ctx.replyWithMarkdown(response);
   } catch (err) {
     console.error(err);
     await ctx.reply(

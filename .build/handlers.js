@@ -144,7 +144,7 @@ const chat = async (ctx) => {
   const text = ctx.message.text;
   try {
     const response = await myAI.chat(text);
-    return ctx.reply(response);
+    return ctx.replyWithMarkdown(response);
   } catch (err) {
     console.error(err);
     await ctx.reply(

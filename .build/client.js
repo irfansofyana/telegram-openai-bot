@@ -56,7 +56,7 @@ class MyOpenAI {
       frequency_penalty: 0,
       presence_penalty: 0,
       max_tokens: 300,
-      stop: [`"""`]
+      stop: ['"""']
     });
     return response.data.choices[0].text;
   }
@@ -97,7 +97,7 @@ class MyOpenAI {
       frequency_penalty: 0.5,
       presence_penalty: 0.5
     });
-    return response.data.choices[0].text || `Sorry boss, I don't know the answer`;
+    return response.data.choices[0].text;
   }
   async chat(text) {
     var _a;

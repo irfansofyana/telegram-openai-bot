@@ -18,49 +18,68 @@ if (botToken === undefined) {
 
 const bot = new Telegraf(botToken);
 
-const ownerTelegramID: number = Number(process.env.OWNER_TELEGRAM_ID);
+const main = async (): Promise<void> => {
+  const ownerTelegramID = Number(process.env.OWNER_TELEGRAM_ID);
 
-const stage = new Scenes.Stage([
-  tldr, ama, writeCode, explainCode, brainstorm, image
-]);
+  const stage = new Scenes.Stage([
+    tldr,
+    ama,
+    writeCode,
+    explainCode,
+    brainstorm,
+    image
+  ]);
 
-bot.use(async (ctx, next) => {
-  if (ctx.from?.id != ownerTelegramID) {
-    ctx.reply(`You're not my boss, I can't answer your question!`);
-    return;
-  }
+  bot.use(async (ctx, next) => {
+    if (ctx.from?.id !== ownerTelegramID) {
+      await ctx.reply("You're not my boss, I can't answer your question!");
+      return;
+    }
 
-  await next();
-})
+    await next();
+  });
 
-bot.use(session());
+  bot.use(session());
 
-bot.use(stage.middleware());
+  bot.use(stage.middleware());
 
-bot.command('tldr', ctx => ctx.scene.enter('tldr'));
+  bot.command('tldr', (ctx) => ctx.scene.enter('tldr'));
 
-bot.command('ama', ctx => ctx.scene.enter('ama'));
+  bot.command('ama', (ctx) => ctx.scene.enter('ama'));
 
-bot.command('code', ctx => ctx.scene.enter('writecode'));
+  bot.command('code', (ctx) => ctx.scene.enter('writecode'));
 
-bot.command('explaincode', ctx => ctx.scene.enter('explaincode'));
+  bot.command('explaincode', (ctx) => ctx.scene.enter('explaincode'));
 
-bot.command('brainstorm', ctx => ctx.scene.enter('brainstorm'));
+  bot.command('brainstorm', (ctx) => ctx.scene.enter('brainstorm'));
 
-bot.command('image', ctx => ctx.scene.enter('image'));
+  bot.command('image', (ctx) => ctx.scene.enter('image'));
 
-bot.command('whoami', ctx => {
-  ctx.reply(`I am a telegram bot that is used by @irfansppp to become his personal assistant. I'm powered by OpenAI.`);
+  bot.command('whoami', async (ctx) => {
+    await ctx.reply(
+      "I am a telegram bot that is used by @irfansppp to become his personal assistant. I'm powered by OpenAI."
+    );
+  });
+
+  bot.on(message('sticker'), async (ctx) => await ctx.reply('👍'));
+
+  bot.on(message('text'), async (ctx) => {
+    await chat(ctx);
+  });
+
+  await bot.launch();
+};
+
+main()
+  .then()
+  .catch((err) => {
+    console.error(err);
+  });
+
+process.once('SIGINT', () => {
+  bot.stop('SIGINT');
 });
 
-bot.on(message('text'), ctx => {
-  chat(ctx)
+process.once('SIGTERM', () => {
+  bot.stop('SIGTERM');
 });
-
-bot.on('sticker', (ctx) => ctx.reply('👍'))
-
-bot.launch();
-
-process.once('SIGINT', () => bot.stop('SIGINT'))
-
-process.once('SIGTERM', () => bot.stop('SIGTERM'))

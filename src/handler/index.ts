@@ -1,6 +1,7 @@
 import { Scenes } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { MyOpenAI } from '../client';
+import { constructTextResponse } from '../domain';
 
 const myAI = new MyOpenAI();
 
@@ -11,7 +12,7 @@ tldr.on(message('text'), async (ctx) => {
   try {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.tldr(textInput);
-    await ctx.reply(response);
+    await ctx.reply(constructTextResponse(response));
     await ctx.scene.leave();
   } catch (err) {
     console.error(err);
@@ -31,7 +32,7 @@ ama.on(message('text'), async (ctx) => {
   try {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.ama(question);
-    await ctx.reply(response);
+    await ctx.reply(constructTextResponse(response));
     await ctx.scene.leave();
   } catch (err) {
     console.error(err);
@@ -53,7 +54,7 @@ writeCode.on(message('text'), async (ctx) => {
   try {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.writeCode(instruction);
-    await ctx.reply(response);
+    await ctx.reply(constructTextResponse(response));
     await ctx.scene.leave();
   } catch (err) {
     console.error(err);
@@ -75,7 +76,7 @@ explainCode.on(message('text'), async (ctx) => {
   try {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.explainCode(codes);
-    await ctx.reply(response);
+    await ctx.reply(constructTextResponse(response));
     await ctx.scene.leave();
   } catch (err) {
     console.error(err);
@@ -94,7 +95,7 @@ brainstorm.on(message('text'), async (ctx) => {
   try {
     await ctx.reply('Hang on boss.. this might take a while.');
     const response = await myAI.brainstorm(topic);
-    await ctx.reply(response);
+    await ctx.reply(constructTextResponse(response));
     await ctx.scene.leave();
   } catch (err) {
     console.error(err);
@@ -128,7 +129,7 @@ export const chat = async (ctx: any): Promise<void> => {
   const text = ctx.message.text;
   try {
     const response = await myAI.chat(text);
-    await ctx.replyWithMarkdown(response);
+    await ctx.replyWithMarkdown(constructTextResponse(response));
   } catch (err) {
     console.error(err);
     await ctx.reply(

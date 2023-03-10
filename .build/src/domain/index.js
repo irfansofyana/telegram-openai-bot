@@ -16,17 +16,26 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var config_exports = {};
-__export(config_exports, {
-  ownerTelegramId: () => ownerTelegramId,
-  telegramToken: () => telegramToken
+var domain_exports = {};
+__export(domain_exports, {
+  constructTextResponse: () => constructTextResponse
 });
-module.exports = __toCommonJS(config_exports);
-const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
-const ownerTelegramId = Number(process.env.OWNER_TELEGRAM_ID);
+module.exports = __toCommonJS(domain_exports);
+function constructTextResponse(r) {
+  let response = r.text + "\n";
+  response += "\n```\n";
+  response += "Usage tokens:\n";
+  response += `- Prompt tokens: ${r.usage_tokens.prompt}
+`;
+  response += `- Completion tokens: ${r.usage_tokens.completion}
+`;
+  response += `- Total tokens: ${r.usage_tokens.total}
+`;
+  response += "\n```\n";
+  return response;
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  ownerTelegramId,
-  telegramToken
+  constructTextResponse
 });
 //# sourceMappingURL=index.js.map

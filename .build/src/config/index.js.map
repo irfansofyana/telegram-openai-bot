@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../../src/config/index.ts"],
-  "sourcesContent": ["export const telegramToken = process.env.TELEGRAM_BOT_TOKEN;\nexport const ownerTelegramId = Number(process.env.OWNER_TELEGRAM_ID);"],
+  "sourcesContent": ["export const telegramToken = process.env.TELEGRAM_BOT_TOKEN;\nexport const ownerTelegramId = Number(process.env.OWNER_TELEGRAM_ID);\n"],
   "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,MAAM,gBAAgB,QAAQ,IAAI;AAClC,MAAM,kBAAkB,OAAO,QAAQ,IAAI,iBAAiB;",
   "names": []
 }

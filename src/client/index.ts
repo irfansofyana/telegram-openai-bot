@@ -1,4 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
+import { TextResponse } from '../domain';
 
 export class MyOpenAI {
   client: OpenAIApi;
@@ -12,7 +13,25 @@ export class MyOpenAI {
     this.client = new OpenAIApi(configuration);
   }
 
-  public async writeCode(text: string): Promise<string> {
+  private buildAIResponse(
+    text: string,
+    usage: {
+      prompt_tokens: number | undefined;
+      completion_tokens: number | undefined;
+      total_tokens: number | undefined;
+    }
+  ): TextResponse {
+    return {
+      text: text,
+      usage_tokens: {
+        prompt: Number(usage.prompt_tokens),
+        completion: Number(usage.completion_tokens),
+        total: Number(usage.total_tokens)
+      }
+    };
+  }
+
+  public async writeCode(text: string): Promise<TextResponse> {
     const response = await this.client.createCompletion({
       model: 'code-davinci-002',
       prompt: text,
@@ -23,10 +42,14 @@ export class MyOpenAI {
       max_tokens: 300
     });
 
-    return response.data.choices[0].text as string;
+    return this.buildAIResponse(response.data.choices[0].text as string, {
+      prompt_tokens: response.data.usage?.prompt_tokens,
+      completion_tokens: response.data.usage?.completion_tokens,
+      total_tokens: response.data.usage?.total_tokens
+    });
   }
 
-  public async explainCode(code: string): Promise<string> {
+  public async explainCode(code: string): Promise<TextResponse> {
     code += '\n"""\n Here\'s what the above code is doing:\n1. ';
     const response = await this.client.createCompletion({
       model: 'code-davinci-002',
@@ -39,10 +62,14 @@ export class MyOpenAI {
       stop: ['"""']
     });
 
-    return response.data.choices[0].text as string;
+    return this.buildAIResponse(response.data.choices[0].text as string, {
+      prompt_tokens: response.data.usage?.prompt_tokens,
+      completion_tokens: response.data.usage?.completion_tokens,
+      total_tokens: response.data.usage?.total_tokens
+    });
   }
 
-  public async tldr(text: string): Promise<string> {
+  public async tldr(text: string): Promise<TextResponse> {
     text += '\nTl;dr\n';
 
     const response = await this.client.createCompletion({
@@ -55,10 +82,14 @@ export class MyOpenAI {
       max_tokens: 200
     });
 
-    return response.data.choices[0].text as string;
+    return this.buildAIResponse(response.data.choices[0].text as string, {
+      prompt_tokens: response.data.usage?.prompt_tokens,
+      completion_tokens: response.data.usage?.completion_tokens,
+      total_tokens: response.data.usage?.total_tokens
+    });
   }
 
-  public async brainstorm(text: string): Promise<string> {
+  public async brainstorm(text: string): Promise<TextResponse> {
     text += "\nLet's think step by step.";
 
     const response = await this.client.createCompletion({
@@ -72,10 +103,14 @@ export class MyOpenAI {
       stop: ['###']
     });
 
-    return response.data.choices[0].text as string;
+    return this.buildAIResponse(response.data.choices[0].text as string, {
+      prompt_tokens: response.data.usage?.prompt_tokens,
+      completion_tokens: response.data.usage?.completion_tokens,
+      total_tokens: response.data.usage?.total_tokens
+    });
   }
 
-  public async ama(text: string): Promise<string> {
+  public async ama(text: string): Promise<TextResponse> {
     const response = await this.client.createCompletion({
       model: 'text-davinci-003',
       prompt: text,
@@ -86,10 +121,14 @@ export class MyOpenAI {
       presence_penalty: 0.5
     });
 
-    return response.data.choices[0].text as string;
+    return this.buildAIResponse(response.data.choices[0].text as string, {
+      prompt_tokens: response.data.usage?.prompt_tokens,
+      completion_tokens: response.data.usage?.completion_tokens,
+      total_tokens: response.data.usage?.total_tokens
+    });
   }
 
-  public async chat(text: string): Promise<string> {
+  public async chat(text: string): Promise<TextResponse> {
     const response = await this.client.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
@@ -107,7 +146,14 @@ export class MyOpenAI {
       max_tokens: 300
     });
 
-    return response.data.choices[0].message?.content as string;
+    return this.buildAIResponse(
+      response.data.choices[0].message?.content as string,
+      {
+        prompt_tokens: response.data.usage?.prompt_tokens,
+        completion_tokens: response.data.usage?.completion_tokens,
+        total_tokens: response.data.usage?.total_tokens
+      }
+    );
   }
 
   public async createImage(text: string): Promise<string> {

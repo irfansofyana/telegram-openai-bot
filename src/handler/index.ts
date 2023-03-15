@@ -127,13 +127,22 @@ image.on(message('text'), async (ctx) => {
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export const chat = async (ctx: any): Promise<void> => {
   const text = ctx.message.text;
+  let response;
+
   try {
-    const response = await myAI.chat(text);
-    await ctx.replyWithMarkdown(constructTextResponse(response));
+    response = await myAI.chat(text);
   } catch (err) {
     console.error(err);
     await ctx.reply(
       'Oopss.. there something wrong boss, please try again later!'
     );
+    return;
+  }
+
+  try {
+    await ctx.replyWithMarkdown(constructTextResponse(response));
+  } catch (err) {
+    console.error(err);
+    await ctx.reply(constructTextResponse(response));
   }
 };

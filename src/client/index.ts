@@ -142,8 +142,7 @@ export class MyOpenAI {
           content: text
         }
       ],
-      temperature: 0.7,
-      max_tokens: 300
+      temperature: 0.7
     });
 
     return this.buildAIResponse(

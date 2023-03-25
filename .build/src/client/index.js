@@ -22,10 +22,11 @@ __export(client_exports, {
 });
 module.exports = __toCommonJS(client_exports);
 var import_openai = require("openai");
+var import_config = require("../config");
 class MyOpenAI {
   client;
   constructor() {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = import_config.openAIAPIKey;
     const configuration = new import_openai.Configuration({
       apiKey
     });

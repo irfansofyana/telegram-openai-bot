@@ -18,14 +18,17 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var config_exports = {};
 __export(config_exports, {
+  openAIAPIKey: () => openAIAPIKey,
   ownerTelegramId: () => ownerTelegramId,
   telegramToken: () => telegramToken
 });
 module.exports = __toCommonJS(config_exports);
 const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
 const ownerTelegramId = Number(process.env.OWNER_TELEGRAM_ID);
+const openAIAPIKey = process.env.OPENAI_API_KEY;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  openAIAPIKey,
   ownerTelegramId,
   telegramToken
 });

@@ -1,11 +1,12 @@
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from 'openai';
+import { openAIAPIKey } from '../config';
 import { TextResponse } from '../domain';
 
 export class MyOpenAI {
   client: OpenAIApi;
 
   constructor() {
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = openAIAPIKey;
     const configuration = new Configuration({
       apiKey
     });

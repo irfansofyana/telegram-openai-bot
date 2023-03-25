@@ -7,7 +7,8 @@ import {
   explainCode,
   brainstorm,
   chat,
-  image
+  image,
+  convo
 } from './handler';
 import { telegramToken, ownerTelegramId } from './config';
 
@@ -29,7 +30,8 @@ const main = async (): Promise<void> => {
     writeCode,
     explainCode,
     brainstorm,
-    image
+    image,
+    convo
   ]);
 
   bot.use(async (ctx, next) => {
@@ -56,6 +58,8 @@ const main = async (): Promise<void> => {
   bot.command('brainstorm', (ctx) => ctx.scene.enter('brainstorm'));
 
   bot.command('image', (ctx) => ctx.scene.enter('image'));
+
+  bot.command('startconvo', (ctx) => ctx.scene.enter('convo'));
 
   bot.command('whoami', async (ctx) => {
     await ctx.reply(

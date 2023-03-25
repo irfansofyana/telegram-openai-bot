@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../../src/domain/index.ts"],
-  "sourcesContent": ["export interface TextResponse {\n  text: string;\n  usage_tokens: {\n    prompt: number;\n    completion: number;\n    total: number;\n  };\n}\n\nexport function constructTextResponse(r: TextResponse): string {\n  let response = r.text + '\\n';\n  response += '\\n```\\n'\n  response += 'Usage tokens:\\n';\n  response += `- Prompt tokens: ${r.usage_tokens.prompt}\\n`;\n  response += `- Completion tokens: ${r.usage_tokens.completion}\\n`;\n  response += `- Total tokens: ${r.usage_tokens.total}\\n`;\n  response += '\\n```\\n'\n\n  return response;\n}\n"],
+  "sourcesContent": ["export interface TextResponse {\n  text: string;\n  usage_tokens: {\n    prompt: number;\n    completion: number;\n    total: number;\n  };\n}\n\nexport function constructTextResponse(r: TextResponse): string {\n  let response = r.text + '\\n';\n  response += '\\n```\\n';\n  response += 'Usage tokens:\\n';\n  response += `- Prompt tokens: ${r.usage_tokens.prompt}\\n`;\n  response += `- Completion tokens: ${r.usage_tokens.completion}\\n`;\n  response += `- Total tokens: ${r.usage_tokens.total}\\n`;\n  response += '\\n```\\n';\n\n  return response;\n}\n"],
   "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AASO,SAAS,sBAAsB,GAAyB;AAC7D,MAAI,WAAW,EAAE,OAAO;AACxB,cAAY;AACZ,cAAY;AACZ,cAAY,oBAAoB,EAAE,aAAa;AAAA;AAC/C,cAAY,wBAAwB,EAAE,aAAa;AAAA;AACnD,cAAY,mBAAmB,EAAE,aAAa;AAAA;AAC9C,cAAY;AAEZ,SAAO;AACT;",
   "names": []
 }

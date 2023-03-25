@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai';
+import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from 'openai';
 import { TextResponse } from '../domain';
 
 export class MyOpenAI {
@@ -128,7 +128,26 @@ export class MyOpenAI {
     });
   }
 
-  public async chat(text: string): Promise<TextResponse> {
+  public async chat(
+    messages: ChatCompletionRequestMessage[]
+  ): Promise<TextResponse> {
+    const response = await this.client.createChatCompletion({
+      model: 'gpt-3.5-turbo',
+      messages,
+      temperature: 0
+    });
+
+    return this.buildAIResponse(
+      response.data.choices[0].message?.content as string,
+      {
+        prompt_tokens: response.data.usage?.prompt_tokens,
+        completion_tokens: response.data.usage?.completion_tokens,
+        total_tokens: response.data.usage?.total_tokens
+      }
+    );
+  }
+
+  public async oneTimeChat(text: string): Promise<TextResponse> {
     const response = await this.client.createChatCompletion({
       model: 'gpt-3.5-turbo',
       messages: [
